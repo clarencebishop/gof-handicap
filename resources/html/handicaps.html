@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="content">
+  <div class="columns">
+    <div class="column">
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th>Golfer</th>
+          <th>Handicap</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in handicaps %}
+          <tr>
+            <td>{{item.name}}</td>
+            <td>{{item.handicap}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+ </div>
+</div>
+{% endblock %}

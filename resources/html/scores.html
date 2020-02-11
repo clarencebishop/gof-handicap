@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="content">
+  <div class="columns">
+    <div class="column">
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th>Golfer</th>
+          <th>Course</th>
+          <th>Date</th>
+          <th>Score</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in scores %}
+          <tr>
+            <td>{{item.golfer_name}}</td>
+            <td>{{item.course_name}}</td>
+            <td>{{item.date_played}}</td>
+            <td>{{item.score}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
