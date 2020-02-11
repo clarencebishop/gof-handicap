@@ -12,15 +12,15 @@
   [[:golfer_name
     st/required
     st/string]
-   
+
    [:course_name
     st/required
     st/string]
-   
+
    [:date_played
     st/required
     st/string]
-   
+
    [:rating
     st/required
     st/string]
@@ -35,7 +35,6 @@
 
 
 (defn validate-score [params]
-  (print params)
   (first (st/validate params score-schema)))
 
 (defn save-score! [{:keys [params]}]
@@ -43,7 +42,7 @@
     (-> (response/found "/")
         (assoc :flash (assoc params :errors errors)))
     (do
-      (db/save-score! params) 
+      (db/save-score! params)
       (response/found "/"))))
 
 
@@ -64,14 +63,16 @@
   (layout/render
     request
     "handicaps.html"
-    {:handicaps [{:name "Clarence Bishop" :handicap 9.9}
-                 {:name "Ty Elliott" :handicap 6.7}
-                 {:name "Eric Williams" :handicap 12.8}
-                 {:name "Kevin Posney" :handicap 11.4}]}))
+    {:handicaps [{:golfer_name "Clarence Bishop" :handicap 9.9}
+                 {:golfer_name "Ty Elliott" :handicap 6.7}
+                 {:golfer_name "Clyde Bishop" :handicap 12.8}
+                 {:golfer_name "Bill Elliott" :handicap 11.4}]}))
 
-(defn about-page [request]
-  (layout/render request "about.html"))
-
+(defn golfer-scores-page [{:keys [path-params] :as request}]
+  (layout/render
+    request
+    "golfer_scores.html"
+    {:scores (db/get-golfer-scores {:golfer_name (:golfer_name path-params)})}))
 
 (defn home-routes []
   [""
@@ -80,6 +81,6 @@
    ["/" {:get home-page
          :post save-score!}]
    ["/scores" {:get index-page}]
-   ["/handicaps" {:get handicap-page}]
-   ["/about" {:get about-page}]])
+   ["/scores/:golfer_name" {:get golfer-scores-page}]
+   ["/handicaps" {:get handicap-page}]])
 

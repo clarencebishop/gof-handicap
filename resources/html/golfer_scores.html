@@ -6,17 +6,17 @@
       <table class="table table-bordered">
         <thead>
         <tr>
-          <th>Golfer</th>
-          <th>Handicap</th>
-          <th></th>
+          <th>Course</th>
+          <th>Date</th>
+          <th>Score</th>
         </tr>
         </thead>
         <tbody>
-        {% for item in handicaps %}
+        {% for item in scores %}
           <tr>
-            <td>{{item.golfer_name}}</td>
-            <td>{{item.handicap}}</td>
-            <td><a href="/scores/{{item.golfer_name}}">View Scores</a></td>
+            <td>{{item.course_name}}</td>
+            <td>{{item.date_played}}</td>
+            <td>{{item.score}}</td>
           </tr>
         {% endfor %}
         </tbody>

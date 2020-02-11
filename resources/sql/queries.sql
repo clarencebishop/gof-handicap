@@ -19,6 +19,11 @@ SELECT * FROM scores
 SELECT * FROM scores
 WHERE id = :id
 
+-- :name get-golfer-scores :? :*
+-- :doc retrieves all score records for given golfer
+SELECT * FROM scores
+WHERE golfer_name = :golfer_name
+
 -- :name delete-score! :! :n
 -- :doc deletes a score record given the id
 DELETE FROM scores
