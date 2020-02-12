@@ -9,42 +9,25 @@
    [struct.core :as st]))
 
 (def score-schema
-  [[:golfer_name
-    st/required
-    st/string]
-
-   [:course_name
-    st/required
-    st/string]
-
-   [:date_played
-    st/required
-    st/string]
-
-   [:rating
-    st/required
-    st/string]
-
-   [:slope
-    st/required
-    st/string]
-
-   [:score
-    st/required
-    st/string]])
+  [[:golfer_name st/required st/string]
+   [:course_name st/required st/string]
+   [:date_played st/required st/string]
+   [:rating st/required st/number-str]
+   [:slope st/required st/integer-str]
+   [:score st/required st/integer-str]])
 
 
 (defn validate-score [params]
-  (first (st/validate params score-schema)))
+  (st/validate params score-schema))
 
 (defn save-score! [{:keys [params]}]
-  (if-let [errors (validate-score params)]
-    (-> (response/found "/")
-        (assoc :flash (assoc params :errors errors)))
-    (do
-      (db/save-score! params)
-      (response/found "/"))))
-
+  (let [result (validate-score params) error (first result) p (second result)]
+        (if (first result)
+          (-> (response/found "/")
+              (assoc :flash (assoc params :errors error)))
+          (do
+            (db/save-score! p)
+            (response/found "/")))))
 
 (defn home-page [{:keys [flash] :as request}]
   (layout/render
