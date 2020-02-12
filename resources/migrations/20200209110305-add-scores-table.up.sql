@@ -7,3 +7,7 @@ CREATE TABLE scores (
   slope VARCHAR(8),
   score VARCHAR(4) NOT NULL
 );
+
+--;;
+
+CREATE INDEX name_idx ON scores (golfer_name);

@@ -72,7 +72,7 @@
   (layout/render
     request
     "golfer_scores.html"
-    {:scores (db/get-golfer-scores {:golfer_name (:golfer_name path-params)})}))
+    {:data {:name (:golfer_name path-params) :scores (db/get-golfer-scores {:golfer_name (:golfer_name path-params)})}}))
 
 (defn home-routes []
   [""

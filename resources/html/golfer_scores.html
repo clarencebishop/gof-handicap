@@ -4,6 +4,8 @@
   <div class="columns">
     <div class="sm-col-12">
       <table class="table table-bordered">
+        <h3>Scores for {{data.name}}</h3>
+        <br>
         <thead>
         <tr>
           <th>Course</th>
@@ -12,7 +14,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for item in scores %}
+        {% for item in data.scores %}
           <tr>
             <td>{{item.course_name}}</td>
             <td>{{item.date_played}}</td>
