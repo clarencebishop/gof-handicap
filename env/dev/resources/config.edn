@@ -1,1 +1,1 @@
-{}
+{:database-url "postgresql://localhost/golf_app_dev?user=postgres&password=postgres"}

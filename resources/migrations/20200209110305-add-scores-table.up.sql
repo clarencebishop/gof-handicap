@@ -1,4 +1,5 @@
-CREATE TABLE scores (
+CREATE TABLE scores
+(
   id serial PRIMARY KEY,
   golfer_name VARCHAR(32) NOT NULL,
   course_name VARCHAR(16) NOT NULL,

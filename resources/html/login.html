@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="content">
+  <div class="columns">
+    <div class="col-xs-4">
+      <form method="POST" action="/register">
+        {% csrf-field %}
+
+        <p>
+          Email:
+          <input class="input" type="text" name="email" value="{{email}}" />
+        </p>
+        {% if errors.email %}
+        <div class="notification is-danger">{{errors.email|join}}</div>
+        {% endif %}
+
+        <p>
+          Password:
+          <input class="input" type="text" name="password" value="{{password}}" />
+        </p>
+        {% if errors.password %}
+        <div class="notification is-danger">{{errors.password|join}}</div>
+        {% endif %}
+
+        <input type="submit" class="button is-primary" value="Submit" />
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
