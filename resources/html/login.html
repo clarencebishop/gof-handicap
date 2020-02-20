@@ -3,20 +3,20 @@
 <div class="content">
   <div class="columns">
     <div class="col-xs-4">
-      <form method="POST" action="/register">
+      <form method="POST" action="/login">
         {% csrf-field %}
 
         <p>
-          Email:
-          <input class="input" type="text" name="email" value="{{email}}" />
+          Username:
+          <input class="input" type="text" name="username" value="{{username}}" />
         </p>
-        {% if errors.email %}
-        <div class="notification is-danger">{{errors.email|join}}</div>
+        {% if errors.username %}
+        <div class="notification is-danger">{{errors.username|join}}</div>
         {% endif %}
 
         <p>
           Password:
-          <input class="input" type="text" name="password" value="{{password}}" />
+          <input class="input" type="password" name="password" value="{{password}}" />
         </p>
         {% if errors.password %}
         <div class="notification is-danger">{{errors.password|join}}</div>

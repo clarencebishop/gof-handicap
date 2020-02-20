@@ -3,7 +3,9 @@
    [golf-handicap.layout :as layout]
    [golf-handicap.db.core :as db]
    [clojure.java.io :as io]
+   [golf-handicap.middleware :as middleware]
    [golf-handicap.routes.auth :as auth]
+   [clojure.tools.logging :as log]
    [ring.util.response]
    [ring.util.http-response :as response]
    [struct.core :as st]))
@@ -38,14 +40,34 @@
 (defn validate-user [params]
   (st/validate params user-schema))
 
-(defn create-user! [{:keys [params]}]
+(defn create-user! [{:keys [params] :as request}]
   (let [result (validate-user params) error (first result) p (second result)]
        (if (first result)
          (-> (response/found "/")
              (assoc :flash (assoc params :errors error)))
          (do
-           (db/create-user! p)
+           (auth/register! request p)
            (response/found "/")))))
+
+(defn my-login-user [request]
+  (if (auth/login! request)
+    (response/found "/scores")
+    (response/found "/login")))
+
+(defn login-user [{:keys [params] :as request}]
+  (let [result (auth/login! request)]
+    (log/info (str "result - " result))
+    (if (= (get-in result [:body :result]) :ok)
+      (response/found "/scores")
+      (do
+        (log/info "**** LOGIN FAILED ****")
+        (-> (response/found "/login")
+            (assoc :flash (assoc params :errors (get-in result [:body :message]))))))))
+
+(defn logout-user [request]
+  (log/info "logging out current user")
+  (auth/logout!)
+  (response/found "/login"))
 
 (defn home-page [{:keys [flash] :as request}]
   (layout/render
@@ -68,8 +90,6 @@
    (merge {:users (db/get-users)}
           (select-keys flash [:name :email :password :errors]))))
 
-(defn authenticate-user! [{:keys [flash] :as request}] (println request))
- 
 (defn index-page [request]
   (layout/render
     request
@@ -93,14 +113,16 @@
 
 (defn home-routes []
   [""
-   {:middleware [middleware/wrap-csrf
-                 middleware/wrap-formats]}
-   ["/" {:get home-page
+   ; {:middleware [middleware/wrap-csrf
+   ;             middleware/wrap-formats]}
+   {:middleware [middleware/wrap-formats]}
+   ["/" {:get  home-page
          :post save-score!}]
-   ["/register" {:get register-page
+   ["/register" {:get  register-page
                  :post create-user!}]
-   ["/login" {:get login-page
-                 :post authenticate-user!}]
+   ["/login" {:get  login-page
+              :post login-user}]
+   ["/logout" {:get logout-user}]
    ["/scores" {:get index-page}]
    ["/scores/:golfer_name" {:get golfer-scores-page}]
    ["/handicaps" {:get handicap-page}]])

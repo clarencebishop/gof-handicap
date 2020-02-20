@@ -22,6 +22,14 @@
         {% endif %}
 
         <p>
+          User Name:
+          <input class="input" type="text" name="username" value="{{username}}" />
+        </p>
+        {% if errors.username %}
+        <div class="notification is-danger">{{errors.username|join}}</div>
+        {% endif %}
+
+        <p>
           Password:
           <input class="input" type="text" name="password" value="{{password}}" />
         </p>
@@ -37,7 +45,7 @@
         <div class="notification is-danger">{{errors.password-confirm|join}}</div>
         {% endif %}
 
-        <input type="submit" class="button is-primary" value="Submit" />
+        <input type="submit" class="button is-primary" value="Register" />
       </form>
     </div>
   </div>

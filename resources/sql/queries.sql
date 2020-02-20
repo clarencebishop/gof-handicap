@@ -37,15 +37,15 @@ WHERE id = :id
 -- :name create-user! :! :n
 -- :doc creates a new user record
 INSERT INTO users
-    (name, email, password)
+    (name, email, username, password)
 VALUES
-    (:name, :email, :password)
+    (:name, :email, :username, :password)
 
 -- :name update-user! :! :n
 -- :doc updates an existing user record
 UPDATE users
 SET name = :name, email
-= :email, password = :password
+= :email, username = :username, password = :password
 WHERE id = :id
 
 -- :name get-users :? :*
@@ -58,6 +58,13 @@ FROM users
 SELECT *
 FROM users
 WHERE id = :id
+
+-- :name get-user-by-username :? :1
+-- :doc retrieves a user record using the username
+SELECT *
+FROM users
+WHERE username = :username
+
 
 -- :name delete-user! :! :n
 -- :doc deletes a user record given the id

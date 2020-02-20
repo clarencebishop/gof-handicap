@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Leiningen: bouncer:1.0.1">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/bouncer/bouncer/1.0.1/bouncer-1.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
