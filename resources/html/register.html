@@ -31,7 +31,7 @@
 
         <p>
           Password:
-          <input class="input" type="text" name="password" value="{{password}}" />
+          <input class="input" type="password" name="password" value="{{password}}" />
         </p>
         {% if errors.password %}
         <div class="notification is-danger">{{errors.password|join}}</div>
@@ -39,7 +39,7 @@
 
         <p>
           Confirm Password:
-          <input class="input" type="text" name="password-confirm" value="{{password-confirm}}" />
+          <input class="input" type="password" name="password-confirm" value="{{password-confirm}}" />
         </p>
         {% if errors.password-confirm %}
         <div class="notification is-danger">{{errors.password-confirm|join}}</div>

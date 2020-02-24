@@ -1,14 +1,14 @@
 (ns golf-handicap.routes.home
   (:require
-   [golf-handicap.layout :as layout]
-   [golf-handicap.db.core :as db]
-   [clojure.java.io :as io]
-   [golf-handicap.middleware :as middleware]
-   [golf-handicap.routes.auth :as auth]
-   [clojure.tools.logging :as log]
-   [ring.util.response]
-   [ring.util.http-response :as response]
-   [struct.core :as st]))
+    [golf-handicap.layout :as layout]
+    [golf-handicap.db.core :as db]
+    [clojure.java.io :as io]
+    [golf-handicap.middleware :as middleware]
+    [golf-handicap.routes.auth :as auth]
+    [clojure.tools.logging :as log]
+    [ring.util.response]
+    [ring.util.http-response :as response]
+    [struct.core :as st]))
 
 (def score-schema
   [[:golfer_name st/required st/string]
@@ -24,12 +24,12 @@
 
 (defn save-score! [{:keys [params]}]
   (let [result (validate-score params) error (first result) p (second result)]
-       (if (first result)
-         (-> (response/found "/")
-             (assoc :flash (assoc params :errors error)))
-         (do
-           (db/save-score! p)
-           (response/found "/")))))
+    (if (first result)
+      (-> (response/found "/")
+          (assoc :flash (assoc params :errors error)))
+      (do
+        (db/save-score! p)
+        (response/found "/")))))
 
 (def user-schema
   [[:name st/required st/string]
@@ -40,84 +40,111 @@
 (defn validate-user [params]
   (st/validate params user-schema))
 
-(defn create-user! [{:keys [params] :as request}]
+(defn create-user! [{:keys [flash params] :as request}]
   (let [result (validate-user params) error (first result) p (second result)]
-       (if (first result)
-         (-> (response/found "/")
-             (assoc :flash (assoc params :errors error)))
-         (do
-           (auth/register! request p)
-           (response/found "/")))))
+    (if (first result)
+      (-> (response/found "/")
+          (assoc :flash (assoc params :errors error)))
+      (do
+        (let [rc (auth/register! request p)]
+          ; (assoc flash (assoc params :errors (:message rc)))
+          (layout/render
+            request
+            "register.html"
+            (merge {:username nil} {:errors {:username (:message rc)}}
+                   (select-keys flash [:username :password :errors]))
+            ;(log/info "create-user..." (auth/register! request p))
+            ;(response/found "/")
+            ))))))
 
-(defn my-login-user [request]
-  (if (auth/login! request)
-    (response/found "/scores")
-    (response/found "/login")))
+(defn home-page [request]
+  (layout/render
+    request
+    "home.html"
+    {}))
 
-(defn login-user [{:keys [params] :as request}]
+(defn login-user [{:keys [flash session] :as request}]
   (let [result (auth/login! request)]
-    (log/info (str "result - " result))
-    (if (= (get-in result [:body :result]) :ok)
-      (response/found "/scores")
+    (log/info result)
+    (if (= (:result result) :ok)
+      (-> (response/found "/scores")
+          (assoc :session (assoc session :identity (:id result) :username (:username result))))
       (do
         (log/info "**** LOGIN FAILED ****")
-        (-> (response/found "/login")
-            (assoc :flash (assoc params :errors (get-in result [:body :message]))))))))
+        (layout/render
+          request
+          "login.html"
+          (merge {:username nil}
+                 (select-keys flash [:username :password :errors])))
+        ; (-> (response/found "/login")
+        ;   (assoc :flash (assoc params :errors (get-in result [:body :message])))
+        ))))
 
-(defn logout-user [request]
+(defn logout-user [{:keys [flash] :as request}]
   (log/info "logging out current user")
   (auth/logout!)
-  (response/found "/login"))
-
-(defn home-page [{:keys [flash] :as request}]
+  ;;(response/found "/login")
   (layout/render
-   request
-   "home.html"
-   (merge {:scores (db/get-all-scores)}
-          (select-keys flash [:golfer_name :course_name :date_played :rating :slope :score :errors]))))
+    request
+    "login.html"
+    (merge {:username nil}
+           (select-keys flash [:name :email :password :errors]))))
 
-(defn register-page [{:keys [flash] :as request}]
+(defn enter-score [{:keys [flash session] :as request}]
   (layout/render
-   request
-   "register.html"
-   (merge {:users (db/get-users)}
-          (select-keys flash [:name :email :password :errors]))))
+    request
+    "enter_score.html"
+    (merge {:scores (db/get-all-scores)} {:username (:username session)}
+           (select-keys flash [:golfer_name :course_name :date_played :rating :slope :score :errors]))))
 
-(defn login-page [{:keys [flash] :as request}]
+(defn register-page [{:keys [flash session] :as request}]
   (layout/render
-   request
-   "login.html"
-   (merge {:users (db/get-users)}
-          (select-keys flash [:name :email :password :errors]))))
+    request
+    "register.html"
+    (merge {:users (db/get-users)} {:username (:username session)}
+           (select-keys flash [:name :email :password :errors]))))
 
-(defn index-page [request]
+(defn login-page [{:keys [flash session] :as request}]
+  (layout/render
+    request
+    "login.html"
+    (merge {:users (db/get-users)} {:username (:username session)}
+           (select-keys flash [:name :email :password :errors]))))
+
+(defn index-page [{:keys [session] :as request}]
   (layout/render
     request
     "scores.html"
-    {:scores (db/get-all-scores)}))
+    {:username (:username session)
+     :scores (db/get-all-scores)}))
 
-(defn handicap-page [request]
+(defn handicap-page [{:keys [session] :as request}]
+  (log/info (:session request))
   (layout/render
     request
     "handicaps.html"
-    {:handicaps [{:golfer_name "Clarence Bishop" :handicap 9.9}
+    {:username (:username session)
+     :handicaps [{:golfer_name "Clarence Bishop" :handicap 9.9}
                  {:golfer_name "Ty Elliott" :handicap 6.7}
                  {:golfer_name "Clyde Bishop" :handicap 12.8}
                  {:golfer_name "Bill Elliott" :handicap 11.4}]}))
 
-(defn golfer-scores-page [{:keys [path-params] :as request}]
+(defn golfer-scores-page [{:keys [params path-params session] :as request}]
+  (print (str "***handicap-page***" params))
   (layout/render
     request
     "golfer_scores.html"
-    {:data {:name (:golfer_name path-params) :scores (db/get-golfer-scores {:golfer_name (:golfer_name path-params)})}}))
+    {:username (:username session)
+     :data {:name (:golfer_name path-params) :scores (db/get-golfer-scores {:golfer_name (:golfer_name path-params)})}}))
 
 (defn home-routes []
   [""
    ; {:middleware [middleware/wrap-csrf
    ;             middleware/wrap-formats]}
    {:middleware [middleware/wrap-formats]}
-   ["/" {:get  home-page
-         :post save-score!}]
+   ["/" {:get home-page}]
+   ["/score" {:get  enter-score
+              :post save-score!}]
    ["/register" {:get  register-page
                  :post create-user!}]
    ["/login" {:get  login-page
