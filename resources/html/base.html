@@ -23,18 +23,21 @@
       <div id="nav-menu" class="navbar-menu">
         <div class="navbar-start">
           {% ifunequal username nil %}
-            <a href="/scores" class="navbar-item{% ifequal page "scores.html" %} is-active{%endifequal%}">Scores</a>
-            <a href="/handicaps"
-              class="navbar-item{% ifequal page "handicaps.html" %} is-active{%endifequal%}">Handicaps</a>
+          <a href="/scores" class="navbar-item{% ifequal page "scores.html" %} is-active{%endifequal%}">Scores</a>
+          <a href="/handicaps"
+            class="navbar-item{% ifequal page "handicaps.html" %} is-active{%endifequal%}">Handicaps</a>
           {% endifunequal %}
           {% ifequal username "admin" %}
-          <a href="/register" class="navbar-item{% ifequal page "register.html" %} is-active{%endifequal%}">Add Golfer</a>
-          <a href="/score" class="navbar-item{% ifequal page "enter_score.html" %} is-active{%endifequal%}">Add Score</a>
+          <a href="/register" class="navbar-item{% ifequal page "register.html" %} is-active{%endifequal%}">Add
+            Golfer</a>
+          <a href="/score" class="navbar-item{% ifequal page "enter_score.html" %} is-active{%endifequal%}">Add
+            Score</a>
           {% endifequal %}
         </div>
         <div class="navbar-end">
           {% ifunequal username nil %}
-            <a href="/logout" class="navbar-item{% ifequal page "logout.html" %} is-active{%endifequal%}">Logout</a>
+          <p class="navbar-item">Logged on as: {{username}}</p>
+          <a href="/logout" class="navbar-item{% ifequal page "logout.html" %} is-active{%endifequal%}">Logout</a>
           {% endifunequal %}
         </div>
       </div>
