@@ -1,8 +1,8 @@
 CREATE TABLE scores
 (
   id serial PRIMARY KEY,
-  golfer_name VARCHAR(32) NOT NULL,
-  course_name VARCHAR(16) NOT NULL,
+  golfer VARCHAR(32) NOT NULL,
+  course VARCHAR(16) NOT NULL,
   date_played VARCHAR(16) NOT NULL,
   rating NUMERIC,
   slope INTEGER,
@@ -11,4 +11,4 @@ CREATE TABLE scores
 
 --;;
 
-CREATE INDEX name_idx ON scores (golfer_name);
+CREATE INDEX name_idx ON scores (golfer);

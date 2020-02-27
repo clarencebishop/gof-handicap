@@ -50,7 +50,7 @@
           (if (= (:status rc) 200)
             (layout/render request
                            "login.html"
-                           (merge {:username (:username p)} {:errors {:username (:message rc)}}
+                           (merge {:username (:username p)}
                                   (select-keys flash [:username :password :errors])))
             (layout/render request
                            "register.html"
@@ -74,21 +74,16 @@
         (layout/render
          request
          "login.html"
-         (merge {:username nil}
-                (select-keys flash [:username :password :errors])))
-        ; (-> (response/found "/login")
-        ;   (assoc :flash (assoc params :errors (get-in result [:body :message])))
-        ))))
+         (merge {:username nil} {:errors {:username "username and/or password incorrect"}}
+                (select-keys flash [:username :password :errors])))))))
 
 (defn logout-user [{:keys [flash] :as request}]
   (log/info "logging out current user")
   (auth/logout!)
-  ;;(response/found "/login")
-  (layout/render
-   request
-   "login.html"
-   (merge {:username nil}
-          (select-keys flash [:name :email :password :errors]))))
+  ; (response/found "/home")
+  (layout/render request
+                 "home.html"
+                 {:username nil}))
 
 (defn enter-score [{:keys [flash session] :as request}]
   (layout/render
@@ -104,12 +99,12 @@
    (merge {:users (db/get-users)} {:username (:username session)}
           (select-keys flash [:name :email :password :errors]))))
 
-(defn login-page [{:keys [flash session] :as request}]
+(defn login-page [{:keys [flash] :as request}]
   (layout/render
    request
    "login.html"
-   (merge {:users (db/get-users)} {:username (:username session)}
-          (select-keys flash [:name :email :password :errors]))))
+   (merge {:username nil}
+          (select-keys flash [:username :password :errors]))))
 
 (defn index-page [{:keys [session] :as request}]
   (layout/render

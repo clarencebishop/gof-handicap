@@ -1,15 +1,15 @@
 -- :name save-score! :! :n
 -- :doc creates a new score record
 INSERT INTO scores
-    (golfer_name, course_name, date_played, rating, slope, score)
+    (golfer, course, date_played, rating, slope, score)
 VALUES
-    (:golfer_name, :course_name, :date_played, :rating, :slope, :score)
+    (:golfer, :course, :date_played, :rating, :slope, :score)
 
 -- :name update-score! :! :n
 -- :doc updates an existing score record
 UPDATE scores
-SET golfer_name = :golfer_name, course_name
-= :course_name, date_played = :date_played, rating = :rating, slope = :slope, score = :score
+SET golfer = :golfer, course
+= :course, date_played = :date_played, rating = :rating, slope = :slope, score = :score
 WHERE id = :id
 
 -- :name get-all-scores :? :*
@@ -27,7 +27,7 @@ WHERE id = :id
 -- :doc retrieves all score records for given golfer
 SELECT *
 FROM scores
-WHERE golfer_name = :golfer_name
+WHERE golfer = :golfer
 
 -- :name delete-score! :! :n
 -- :doc deletes a score record given the id
