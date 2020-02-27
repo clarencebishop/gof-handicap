@@ -121,12 +121,13 @@
    {:username (:username session)
     :handicaps [{:golfer "Clarence Bishop" :handicap 9.9}
                 {:golfer "Tyrone Elliott" :handicap 6.7}
+                {:golfer "Shawn Henderson" :handicap 9.7}
+                {:golfer "Cleveland Harris" :handicap 8.4}
                 {:golfer "Clyde Bishop" :handicap 12.8}
-                {:golfer "Bill Elliott" :handicap 11.4}]}))
+                {:golfer "David Torrain" :handicap 8.4}]}))
 
 (defn golfer-scores-page [{:keys [params path-params session] :as request}]
-  (log/info (str "***golfer-score-pagese***" params))
-  (log/info (str "***golfer-score-pages***" path-params))
+  (log/info (str "golfer-score-pages: " path-params))
   (layout/render
    request
    "golfer_scores.html"
