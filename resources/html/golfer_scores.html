@@ -7,23 +7,23 @@
         <h3>Scores for {{data.name}}</h3>
         <br>
         <thead>
-        <tr>
-          <th>Course</th>
-          <th>Date</th>
-          <th>Score</th>
-        </tr>
+          <tr>
+            <th>Course</th>
+            <th>Date</th>
+            <th>Score</th>
+          </tr>
         </thead>
         <tbody>
-        {% for item in data.scores %}
+          {% for item in data.scores %}
           <tr>
-            <td>{{item.course_name}}</td>
+            <td>{{item.course}}</td>
             <td>{{item.date_played}}</td>
             <td>{{item.score}}</td>
           </tr>
-        {% endfor %}
+          {% endfor %}
         </tbody>
       </table>
     </div>
- </div>
+  </div>
 </div>
 {% endblock %}

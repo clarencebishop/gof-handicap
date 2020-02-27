@@ -7,18 +7,18 @@
         {% csrf-field %}
         <p>
           Golfer:
-          <input class="input" type="text" name="golfer_name" value="{{golfer_name}}" />
+          <input class="input" type="text" name="golfer" value="{{golfer}}" />
         </p>
-        {% if errors.golfer_name %}
-        <div class="notification is-danger">{{errors.golfer_name|join}}</div>
+        {% if errors.golfer %}
+        <div class="notification is-danger">{{errors.golfer|join}}</div>
         {% endif %}
 
         <p>
           Course:
-          <input class="input" type="text" name="course_name" value="{{course_name}}" />
+          <input class="input" type="text" name="course" value="{{course}}" />
         </p>
-        {% if errors.course_name %}
-        <div class="notification is-danger">{{errors.course_name|join}}</div>
+        {% if errors.course %}
+        <div class="notification is-danger">{{errors.course|join}}</div>
         {% endif %}
 
         <p>

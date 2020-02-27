@@ -5,22 +5,22 @@
     <div class="column is-two-thirds">
       <table class="table table-bordered">
         <thead>
-        <tr>
-          <th>Golfer</th>
-          <th>Course</th>
-          <th>Date</th>
-          <th>Score</th>
-        </tr>
+          <tr>
+            <th>Golfer</th>
+            <th>Course</th>
+            <th>Date</th>
+            <th>Score</th>
+          </tr>
         </thead>
         <tbody>
-        {% for item in scores %}
+          {% for item in scores %}
           <tr>
-            <td>{{item.golfer_name}}</td>
-            <td>{{item.course_name}}</td>
+            <td>{{item.golfer}}</td>
+            <td>{{item.course}}</td>
             <td>{{item.date_played}}</td>
             <td>{{item.score}}</td>
           </tr>
-        {% endfor %}
+          {% endfor %}
         </tbody>
       </table>
     </div>

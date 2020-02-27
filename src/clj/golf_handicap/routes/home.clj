@@ -11,8 +11,8 @@
    [struct.core :as st]))
 
 (def score-schema
-  [[:golfer_name st/required st/string]
-   [:course_name st/required st/string]
+  [[:golfer st/required st/string]
+   [:course st/required st/string]
    [:date_played st/required st/string]
    [:rating st/required st/number-str]
    [:slope st/required st/integer-str]
@@ -90,7 +90,7 @@
    request
    "enter_score.html"
    (merge {:scores (db/get-all-scores)} {:username (:username session)}
-          (select-keys flash [:golfer_name :course_name :date_played :rating :slope :score :errors]))))
+          (select-keys flash [:golfer :course :date_played :rating :slope :score :errors]))))
 
 (defn register-page [{:keys [flash session] :as request}]
   (layout/render
@@ -119,18 +119,19 @@
    request
    "handicaps.html"
    {:username (:username session)
-    :handicaps [{:golfer_name "Clarence Bishop" :handicap 9.9}
-                {:golfer_name "Ty Elliott" :handicap 6.7}
-                {:golfer_name "Clyde Bishop" :handicap 12.8}
-                {:golfer_name "Bill Elliott" :handicap 11.4}]}))
+    :handicaps [{:golfer "Clarence Bishop" :handicap 9.9}
+                {:golfer "Tyrone Elliott" :handicap 6.7}
+                {:golfer "Clyde Bishop" :handicap 12.8}
+                {:golfer "Bill Elliott" :handicap 11.4}]}))
 
 (defn golfer-scores-page [{:keys [params path-params session] :as request}]
-  (print (str "***handicap-page***" params))
+  (log/info (str "***golfer-score-pagese***" params))
+  (log/info (str "***golfer-score-pages***" path-params))
   (layout/render
    request
    "golfer_scores.html"
    {:username (:username session)
-    :data {:name (:golfer_name path-params) :scores (db/get-golfer-scores {:golfer_name (:golfer_name path-params)})}}))
+    :data {:name (:golfer path-params) :scores (db/get-golfer-scores {:golfer (:golfer path-params)})}}))
 
 (defn home-routes []
   [""
@@ -146,5 +147,5 @@
               :post login-user}]
    ["/logout" {:get logout-user}]
    ["/scores" {:get index-page}]
-   ["/scores/:golfer_name" {:get golfer-scores-page}]
+   ["/scores/:golfer" {:get golfer-scores-page}]
    ["/handicaps" {:get handicap-page}]])

@@ -5,23 +5,23 @@
     <div class="column is-half">
       <table class="table table-bordered">
         <thead>
-        <tr>
-          <th>Golfer</th>
-          <th>Handicap</th>
-          <th></th>
-        </tr>
+          <tr>
+            <th>Golfer</th>
+            <th>Handicap</th>
+            <th></th>
+          </tr>
         </thead>
         <tbody>
-        {% for item in handicaps %}
+          {% for item in handicaps %}
           <tr>
-            <td>{{item.golfer_name}}</td>
+            <td>{{item.golfer}}</td>
             <td>{{item.handicap}}</td>
-            <td><a href="/scores/{{item.golfer_name}}">View Scores</a></td>
+            <td><a href="/scores/{{item.golfer}}">View Scores</a></td>
           </tr>
-        {% endfor %}
+          {% endfor %}
         </tbody>
       </table>
     </div>
- </div>
+  </div>
 </div>
 {% endblock %}
