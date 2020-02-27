@@ -6,5 +6,3 @@ CREATE TABLE users
     username VARCHAR(32) UNIQUE NOT NULL,
     password VARCHAR(128) NOT NULL
 );
-
---;;
