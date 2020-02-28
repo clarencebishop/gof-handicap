@@ -74,7 +74,7 @@
         (layout/render
          request
          "login.html"
-         (merge {:username nil} {:errors {:username "username and/or password incorrect"}}
+         (merge {:username nil} {:errors {:username "Incorrect username and/or password."}}
                 (select-keys flash [:username :password :errors])))))))
 
 (defn logout-user [{:keys [flash] :as request}]
